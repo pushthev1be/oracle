@@ -289,22 +289,188 @@ See [full schema docs →](docs/database-schema.md)
 
 ---
 
+## Platform Scale
+
+| Metric | Detail |
+|--------|--------|
+| Database tables | 7 core tables + RLS policies on all |
+| Edge functions | 5 (settle, brain-sync, odds-aggregator, monitor, betexplorer-scraper) |
+| Sports covered | Football (20+ leagues), Basketball (NBA), Tennis (ATP/WTA/Slams) |
+| Odds sources | 3 (The Odds API, BetExplorer, Pinnacle) |
+| Cron schedule | Nightly settlement at 03:00 UTC |
+| Concurrency | QuickSlip: 4 parallel Gemini analyses per request |
+| API key pool | Multi-key rotation with per-key cooldown after 429 |
+| Tier enforcement layers | 3 (frontend → app logic → Supabase RLS) |
+
+---
+
+## Engineering Challenges
+
+### The Basketball Score Bug
+**Problem:** Users were getting NBA predictions like "predicted score: 2–1". The model was broken for basketball.
+
+**Root cause:** The Poisson distribution is designed for low-count rare events (football goals average 1.2–1.8 per team). Feeding NBA moneyline odds into the same Poisson pipeline produced lambdas of ~1.8 — which is a soccer score, not a basketball score.
+
+**Fix:** Built a completely separate `deriveBasketballBaseline()` function. Instead of Poisson, it:
+1. Does 2-way odds normalisation (NBA has no draw)
+2. Maps home win probability to an implied point spread
+3. Applies it against the NBA league average PPG (110) + home court advantage (3.5 pts)
+4. Outputs realistic totals like 108–103
+
+```typescript
+// mathService.ts — NBA pace model
+const spread = (homeWinProb - 0.5) * AVG_TOTAL * 0.12;
+const homeLambda = Math.round(avgPerTeam + spread + HOME_BIAS / 2);
+const awayLambda = Math.round(avgPerTeam - spread - HOME_BIAS / 2);
+// Result: 108 vs 103 instead of 2 vs 1
+```
+
+---
+
+### Supabase Auth Lock Contention
+**Problem:** Concurrent requests during QuickSlip (4 parallel analyses) were hitting Supabase auth lock contention errors — the session token refresh was colliding with itself.
+
+**Root cause:** Each parallel Gemini call was independently triggering Supabase client auth refresh. Under concurrency, these overlapped and deadlocked on the auth mutex.
+
+**Fix:** Separated the Supabase client into two instances — one with auth (for user-scoped queries) and one without (`supabaseNoAuth`) for read-only public data. Parallel analyses use the no-auth client, eliminating the contention entirely.
+
+---
+
+### LLM Score Hallucination
+**Problem:** Without constraints, Gemini would occasionally hallucinate wildly off-base scorelines or output basketball scores in soccer format.
+
+**Fix:** The quant layer runs first and produces mathematically grounded lambdas. These are injected into the Gemini prompt as hard anchors:
+
+```
+QUANT BASELINE (treat as ground truth):
+- Home expected goals: 1.42 | Away: 0.98
+- Fair probabilities: Home 58% | Draw 22% | Away 20%
+- Your predicted score MUST be within ±0.8 goals of this baseline
+```
+
+Basketball adds an explicit rule: *"BASKETBALL SCORES MUST BE 95–130 per team — outputting '2–1' is a CRITICAL ERROR."*
+
+---
+
+### Zero-Dependency Toast System
+**Problem:** `alert()` blocks the main thread and looks terrible. React Context-based toast systems add re-render overhead for something that should be fire-and-forget.
+
+**Fix:** Module-level event emitter — no React, no dependencies, no re-renders on the wrong tree:
+
+```typescript
+// services/toast.ts
+type ToastHandler = (msg: string, type: ToastType) => void;
+let _handler: ToastHandler | null = null;
+
+export const toast = {
+  success: (msg: string) => _handler?.(msg, 'success'),
+  error:   (msg: string) => _handler?.(msg, 'error'),
+  warning: (msg: string) => _handler?.(msg, 'warning'),
+};
+
+// ToastContainer.tsx registers _handler once on mount
+// Any module in the app can call toast.error() with zero imports
+```
+
+---
+
+### Subscription Tier Enforcement at 3 Layers
+Free users bypassing the frontend still can't access premium data because RLS policies on Supabase block it at the query level:
+
+```sql
+-- league_priors: free users only see major leagues
+CREATE POLICY "tier_gate_league_priors"
+ON league_priors FOR SELECT
+USING (
+  is_major_league(league)
+  OR
+  (SELECT subscription_tier FROM profiles WHERE id = auth.uid())
+    IN ('basic', 'premium', 'elite')
+);
+```
+
+The frontend shows an upgrade prompt, the application checks the tier before running analysis, and the database refuses the query regardless. Three independent failure points — all three must be bypassed simultaneously to access premium data.
+
+---
+
 ## Key Engineering Decisions
 
 **Why Supabase over Firebase?**
-Row Level Security enforces subscription tiers at the database level — a free user literally cannot query premium data even if they bypass the frontend. No application-layer trust required.
+Row Level Security enforces subscription tiers at the database level — a free user literally cannot query premium data even if they bypass the frontend. Firebase has no equivalent per-row security primitive.
 
 **Why Gemini 2.5 Flash with Search Grounding?**
-Sports predictions go stale within hours. Grounded search means every analysis queries live injury reports, team news, and form — not static training data from months ago.
+Sports predictions go stale within hours. Static training data is useless for "who's injured tonight". Grounded search queries live sources on every analysis call.
 
 **Why a custom quant layer instead of just prompting the AI?**
 LLMs hallucinate scores. The quant baseline anchors the AI to mathematically sound probability ranges derived from actual market odds. The AI adds context the quant can't see (injuries, psychology, weather). Neither alone is as accurate as both together.
 
 **Why separate models for football vs basketball?**
-Poisson distribution models goals well (0–5 range, rare events). Basketball scores are continuous, high-variance point totals. Discovered this the hard way — Poisson was outputting "NBA score: 2–1". The NBA pace model uses a direct 2-way odds conversion to point expectations with home court advantage baked in.
+Poisson models goals well (0–5 range). Basketball scores are continuous, high-variance point totals. Proved this empirically when Poisson started outputting NBA scores of "2–1".
 
 **Why multi-key Gemini rotation?**
-QuickSlip runs 2–4 analyses in parallel. A single API key hits rate limits immediately. The rotation pool with per-key cooldown tracking handles concurrency transparently.
+QuickSlip runs 2–4 analyses in parallel. A single API key hits rate limits immediately. The rotation pool with per-key cooldown tracking handles concurrency transparently without user-visible failures.
+
+---
+
+## Code Highlights
+
+### Adaptive Learning — League Prior Update
+After every settled match, the model recalibrates its expectations for that competition:
+
+```typescript
+// Called nightly by settle-predictions edge function
+async function updateLeaguePriors(league: string, residuals: Residual[]) {
+  const avgError = residuals.reduce((s, r) => s + r.totalError, 0) / residuals.length;
+  const homeBiasDelta = residuals.reduce((s, r) => s + r.homeResidual, 0) / residuals.length;
+
+  await supabase.from('league_priors').upsert({
+    league,
+    avg_total_error: avgError,
+    home_bias: existingPrior.home_bias + homeBiasDelta * LEARNING_RATE,
+    calibration_bias: computeCalibrationBias(residuals),
+    sample_size: existingPrior.sample_size + residuals.length,
+    last_updated: new Date().toISOString(),
+  });
+}
+```
+
+### Odds Normalisation — Vig Removal
+```typescript
+// mathService.ts — strips bookmaker margin to find true fair probability
+function removeVig(homeOdds: number, drawOdds: number, awayOdds: number) {
+  const impliedHome = 1 / homeOdds;
+  const impliedDraw = drawOdds ? 1 / drawOdds : 0;
+  const impliedAway = 1 / awayOdds;
+  const overround = impliedHome + impliedDraw + impliedAway; // e.g. 1.06 = 6% vig
+
+  return {
+    fairHome: impliedHome / overround,
+    fairDraw: impliedDraw / overround,
+    fairAway: impliedAway / overround,
+  };
+}
+```
+
+### Model Version Tournament
+```typescript
+// After snapshot refresh, promote the model with lowest avg error
+async function promotebestModel() {
+  const { data: versions } = await supabase
+    .from('model_versions')
+    .select('*')
+    .gte('sample_size', MIN_SAMPLE_FOR_PROMOTION)
+    .order('avg_total_error', { ascending: true })
+    .limit(1);
+
+  if (versions?.[0] && !versions[0].is_active) {
+    await supabase.from('model_versions')
+      .update({ is_active: false }).neq('version_id', versions[0].version_id);
+    await supabase.from('model_versions')
+      .update({ is_active: true, promoted_at: new Date() })
+      .eq('version_id', versions[0].version_id);
+  }
+}
+```
 
 ---
 
