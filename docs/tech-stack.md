@@ -13,9 +13,11 @@
 ### Frontend Architecture
 - **Component-driven** — BetSlip, QuickSlip, AccuracyDashboard, Leaderboard all isolated
 - **Context-based auth** — `useAuth()` hook wraps Supabase session state globally
-- **Toast notification system** — module-level event emitter, zero dependencies
+- **Toast notification system** — module-level event emitter, zero dependencies, no re-renders
 - **Skeleton loading** — shimmer placeholders for every async data boundary
 - **Mobile-first** — 44px+ touch targets, safe-area insets, `touch-action: manipulation`
+- **PKCE auth** — native Navigator Locks in production, no-op in dev (StrictMode safe)
+- **Stable storage keys** — `oracle_vault_id_{uuid}` prevents slip loss across profile states
 
 ---
 
@@ -24,19 +26,49 @@
 | Technology | Role |
 |-----------|------|
 | Supabase Postgres | Primary database |
-| Supabase Auth | User authentication (email/magic link) |
+| Supabase Auth | Email OTP · Password · Google OAuth · PKCE flow |
 | Supabase Edge Functions | Serverless compute (Deno) |
 | Supabase RLS | Per-row security enforcement by subscription tier |
-| pg_cron | Nightly automated settlement job |
+| pg_cron | Nightly automated settlement + scheduled social posts |
 
 ### Edge Functions
+
 | Function | Trigger | Purpose |
 |---------|---------|---------|
-| `settle-predictions` | pg_cron nightly | Settles pending predictions against actual scores |
+| `settle-predictions` | pg_cron 03:00 UTC | Settles pending predictions, updates league priors |
 | `brain-sync` | On demand | Syncs league priors and team strengths from settled data |
 | `odds-aggregator` | Scheduled | Pulls and caches odds from multiple sources |
+| `precompute-analyses` | Scheduled | Pre-runs AI on upcoming fixtures for instant QuickSlip |
+| `daily-social-post` | Cron daily | Posts picks to Twitter and Telegram automatically |
+| `telegram-bot` | Webhook | Commands, account linking, pick delivery |
+| `stripe-checkout` | Client-triggered | Creates Stripe checkout sessions |
+| `stripe-webhook` | Stripe POST | Processes payments, updates subscription tier |
 | `monitor-oracle` | Scheduled | Platform health checks and alerting |
-| `betexplorer-scraper` | Scheduled | Scrapes additional odds data |
+| `betexplorer-scraper` | Scheduled | Scrapes supplementary odds data |
+| `basketball-odds` | Scheduled | NBA-specific odds fetch and normalisation |
+| `player-props` | On demand | Fetches and caches player prop markets |
+
+---
+
+## Payments
+
+| Technology | Role |
+|-----------|------|
+| Stripe | Subscription billing |
+| Stripe Webhooks | Tier updates on payment events |
+| Supabase RLS | Tier enforcement at DB layer |
+
+Idempotency guards on the webhook handler prevent duplicate tier changes from replayed events.
+
+---
+
+## Social & Notifications
+
+| Service | Role |
+|---------|------|
+| Telegram Bot API | Daily picks delivery, account linking, VIP channel |
+| Twitter API | Automated daily pick posts via `daily-social-post` |
+| global_cache table | Audit log of every social post (`social_picks_YYYY-MM-DD` keys) |
 
 ---
 
@@ -56,6 +88,7 @@ Oracle manages a pool of Gemini API keys with:
 - Per-project concurrency limits to avoid rate limits
 - Cooldown tracking per key after 429 responses
 - Progressive backoff with smart key selection
+- Transparent to the user — QuickSlip's 4 parallel analyses never surface key failures
 
 ---
 
@@ -78,6 +111,12 @@ Oracle manages a pool of Gemini API keys with:
 3. League average PPG (110) ± spread + home court advantage (3.5 pts)
 4. Adjusted by adaptive team scoring history if available
 5. Outputs: homeLambda (points), awayLambda (points), predictedTotal, impliedSpread
+```
+
+### Tennis
+```
+1. Direct probability from moneyline odds
+2. No score model — confidence derived from implied probability gap
 ```
 
 ### Adaptive Learning Loop
