@@ -1,6 +1,8 @@
 # Oracle Odds AI
 
 > **AI-powered sports prediction platform** — live odds, quantitative modelling, and machine learning that gets smarter with every settled match.
+> **LIVE DEMO**
+> https://app.arcade.software/share/W7K9sgOG2ZVtwSNNJStO
 
 🌐 **[oracleai.live](https://oracleai.live)** &nbsp;|&nbsp; 📱 **[Telegram Channel](https://t.me/oracleoddsai)** &nbsp;|&nbsp; 🐦 **[@oracleoddsai](https://twitter.com/oracleoddsai)** &nbsp;|&nbsp; ⚡ React · Supabase · Gemini 2.5 Flash
 
