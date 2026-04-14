@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oracle Engine</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0f0a;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #e2e8e2;
+    padding: 40px;
+    min-height: 100vh;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .header h1 {
+    font-size: 13px;
+    letter-spacing: 6px;
+    color: #4ade80;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f0faf0;
+    letter-spacing: 1px;
+  }
+  .header p {
+    font-size: 12px;
+    color: #6b7e6b;
+    margin-top: 6px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .diagram {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* Column headers */
+  .col-header {
+    text-align: center;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #4a5e4a;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #1a2a1a;
+    margin-bottom: 16px;
+  }
+
+  .col { display: flex; flex-direction: column; gap: 10px; padding: 0 6px; }
+
+  /* Cards */
+  .card {
+    background: #0f1a0f;
+    border: 1px solid #1e2e1e;
+    border-radius: 8px;
+    padding: 12px 14px;
+    position: relative;
+  }
+  .card.green-glow { border-color: #166534; box-shadow: 0 0 12px rgba(74,222,128,0.08); }
+  .card.dim { background: #0c120c; border-color: #182018; }
+
+  .card-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #4a5e4a;
+    margin-bottom: 4px;
+  }
+  .card-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #d4ecd4;
+    margin-bottom: 2px;
+  }
+  .card-sub {
+    font-size: 10px;
+    color: #4a6a4a;
+    line-height: 1.4;
+  }
+  .card-badge {
+    display: inline-block;
+    font-size: 8px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-top: 5px;
+  }
+  .badge-green { background: #14532d; color: #4ade80; }
+  .badge-slate { background: #1e2a1e; color: #6b9e6b; }
+  .badge-dark  { background: #111711; color: #4a6a4a; border: 1px solid #1e2e1e; }
+
+  /* Arrow connectors between columns */
+  .arrow-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2px;
+    gap: 10px;
+  }
+  .arrow {
+    color: #2d4a2d;
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .arrow.bright { color: #4ade80; }
+
+  /* Section divider */
+  .section-row {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0 16px;
+  }
+  .section-row hr { flex: 1; border: none; border-top: 1px solid #1a2a1a; }
+  .section-row span {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #2d4a2d;
+    white-space: nowrap;
+  }
+
+  /* Bottom outputs */
+  .outputs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    max-width: 1100px;
+    margin: 24px auto 0;
+  }
+  .output-card {
+    background: #0f1a0f;
+    border: 1px solid #166534;
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+  .output-icon { font-size: 20px; margin-bottom: 6px; }
+  .output-title { font-size: 12px; font-weight: 600; color: #4ade80; margin-bottom: 3px; }
+  .output-sub { font-size: 10px; color: #4a6a4a; }
+
+  /* Learning loop */
+  .loop-row {
+    max-width: 1100px;
+    margin: 28px auto 0;
+    background: #0c120c;
+    border: 1px solid #1a2e1a;
+    border-radius: 10px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .loop-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #4ade80;
+    white-space: nowrap;
+  }
+  .loop-steps {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    flex: 1;
+  }
+  .loop-step {
+    font-size: 10px;
+    color: #6b9e6b;
+    background: #111a11;
+    border: 1px solid #1e2e1e;
+    border-radius: 4px;
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+  .loop-arrow { color: #2d4a2d; font-size: 14px; }
+
+  .footer {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 10px;
+    color: #2d3a2d;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Architecture</h1>
+  <h2>Oracle Odds AI</h2>
+  <p>Prediction Engine · v1.6</p>
+</div>
+
+<!-- MAIN PIPELINE -->
+<div class="diagram">
+
+  <!-- COL 1: DATA SOURCES -->
+  <div class="col">
+    <div class="col-header">Data Sources</div>
+    <div class="card">
+      <div class="card-label">Odds</div>
+      <div class="card-title">Smarkets</div>
+      <div class="card-sub">Scraped 1x2 odds</div>
+      <span class="card-badge badge-green">Live</span>
+    </div>
+    <div class="card">
+      <div class="card-label">Odds</div>
+      <div class="card-title">Pinnacle</div>
+      <div class="card-sub">NBA / NCAAB sharp lines</div>
+      <span class="card-badge badge-green">Live</span>
+    </div>
+    <div class="card">
+      <div class="card-label">Odds</div>
+      <div class="card-title">Aggregator</div>
+      <div class="card-sub">114 unified markets</div>
+      <span class="card-badge badge-green">Live</span>
+    </div>
+    <div class="card">
+      <div class="card-label">Fixtures</div>
+      <div class="card-title">ESPN</div>
+      <div class="card-sub">Soccer · NBA · MLB · NFL · Tennis</div>
+      <span class="card-badge badge-green">Primary</span>
+    </div>
+    <div class="card dim">
+      <div class="card-label">Fixtures</div>
+      <div class="card-title">Football-Data.org</div>
+      <div class="card-sub">Dev only (CORS blocked in prod)</div>
+      <span class="card-badge badge-dark">Dev</span>
+    </div>
+    <div class="card">
+      <div class="card-label">Props</div>
+      <div class="card-title">PrizePicks</div>
+      <div class="card-sub">2,900+ lines · 43 teams</div>
+      <span class="card-badge badge-green">Live</span>
+    </div>
+    <div class="card">
+      <div class="card-label">Props</div>
+      <div class="card-title">Underdog</div>
+      <div class="card-sub">Alternative prop lines</div>
+      <span class="card-badge badge-slate">Active</span>
+    </div>
+  </div>
+
+  <!-- ARROW COL -->
+  <div class="arrow-col" style="padding-top:48px">
+    <div class="arrow">›</div>
+    <div class="arrow">›</div>
+    <div class="arrow">›</div>
+    <div class="arrow">›</div>
+    <div class="arrow">›</div>
+    <div class="arrow">›</div>
+    <div class="arrow">›</div>
+  </div>
+
+  <!-- COL 2: PROCESSING -->
+  <div class="col">
+    <div class="col-header">Processing</div>
+    <div class="card green-glow">
+      <div class="card-label">Core Model</div>
+      <div class="card-title">Poisson Engine</div>
+      <div class="card-sub">deriveLambdas() → P(score) matrix → win/draw/loss probs</div>
+      <span class="card-badge badge-green">Always runs</span>
+    </div>
+    <div class="card">
+      <div class="card-label">Calibration</div>
+      <div class="card-title">League Priors</div>
+      <div class="card-sub">calibrationBias · home_bias · draw_bias per league</div>
+      <span class="card-badge badge-slate">Auto-updated</span>
+    </div>
+    <div class="card">
+      <div class="card-label">ELO Ratings</div>
+      <div class="card-title">Team Strengths</div>
+      <div class="card-sub">attack_lambda · defense_lambda · 30-game rolling avg</div>
+      <span class="card-badge badge-slate">Trigger updated</span>
+    </div>
+    <div class="card">
+      <div class="card-label">Form</div>
+      <div class="card-title">Knowledge Graph</div>
+      <div class="card-sub">EMA-smoothed signals · W/D/L · xG trend</div>
+      <span class="card-badge badge-slate">5-game window</span>
+    </div>
+    <div class="card">
+      <div class="card-label">Props</div>
+      <div class="card-title">Rolling Form</div>
+      <div class="card-sub">player_stats · last5/last10 avg · trend signal</div>
+      <span class="card-badge badge-slate">4h refresh</span>
+    </div>
+    <div class="card">
+      <div class="card-label">Props</div>
+      <div class="card-title">Stat Priority</div>
+      <div class="card-sub">Soccer: Goals › Assists › Shots › Passes. Others: line value desc.</div>
+      <span class="card-badge badge-slate">Ranked</span>
+    </div>
+  </div>
+
+  <!-- ARROW COL -->
+  <div class="arrow-col" style="padding-top:48px">
+    <div class="arrow bright">›</div>
+    <div class="arrow">›</div>
+    <div class="arrow">›</div>
+    <div class="arrow">›</div>
+    <div class="arrow">›</div>
+    <div class="arrow">›</div>
+  </div>
+
+  <!-- COL 3: AI LAYER -->
+  <div class="col">
+    <div class="col-header">AI Layer</div>
+    <div class="card green-glow">
+      <div class="card-label">Model</div>
+      <div class="card-title">Gemini 2.5 Flash</div>
+      <div class="card-sub">Primary · grounding enabled · temp 0.0</div>
+      <span class="card-badge badge-green">Primary</span>
+    </div>
+    <div class="card dim">
+      <div class="card-label">Fallback</div>
+      <div class="card-title">Gemini Flash Lite</div>
+      <div class="card-sub">On 429 / 503</div>
+      <span class="card-badge badge-slate">Fallback 1</span>
+    </div>
+    <div class="card dim">
+      <div class="card-label">Fallback</div>
+      <div class="card-title">Gemini 1.5 Flash</div>
+      <div class="card-sub">Last resort</div>
+      <span class="card-badge badge-dark">Fallback 2</span>
+    </div>
+    <div class="card">
+      <div class="card-label">Routing</div>
+      <div class="card-title">Gemini Proxy</div>
+      <div class="card-sub">Server-side keys · round-robin · 65s cooldown per key</div>
+      <span class="card-badge badge-slate">Edge fn</span>
+    </div>
+    <div class="card">
+      <div class="card-label">Props AI</div>
+      <div class="card-title">Props Oracle</div>
+      <div class="card-sub">Batch OVER/UNDER · confidence 40-82 · 6-word reason</div>
+      <span class="card-badge badge-green">Per match</span>
+    </div>
+    <div class="card dim">
+      <div class="card-label">Failsafe</div>
+      <div class="card-title">Quant Fallback</div>
+      <div class="card-sub">Full prediction with no AI — always works</div>
+      <span class="card-badge badge-dark">Always ready</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- OUTPUTS -->
+<div class="outputs">
+  <div class="output-card">
+    <div class="output-icon">⚡</div>
+    <div class="output-title">Match Predictions</div>
+    <div class="output-sub">Scoreline · Win/Draw/Loss · Confidence · EV edge</div>
+  </div>
+  <div class="output-card">
+    <div class="output-icon">📊</div>
+    <div class="output-title">Player Props</div>
+    <div class="output-sub">OVER/UNDER oracle · confidence · reason · American odds</div>
+  </div>
+  <div class="output-card">
+    <div class="output-icon">📋</div>
+    <div class="output-title">BetSlip</div>
+    <div class="output-sub">User picks · Kelly sizing · settlement tracking</div>
+  </div>
+  <div class="output-card">
+    <div class="output-icon">📡</div>
+    <div class="output-title">Telegram</div>
+    <div class="output-sub">Morning picks · evening results · daily post</div>
+  </div>
+</div>
+
+<!-- LEARNING LOOP -->
+<div class="loop-row">
+  <div class="loop-label">Learning Loop</div>
+  <div class="loop-steps">
+    <div class="loop-step">Match Played</div>
+    <div class="loop-arrow">›</div>
+    <div class="loop-step">ESPN Boxscore</div>
+    <div class="loop-arrow">›</div>
+    <div class="loop-step">settle-predictions (cron)</div>
+    <div class="loop-arrow">›</div>
+    <div class="loop-step">league_priors updated</div>
+    <div class="loop-arrow">›</div>
+    <div class="loop-step">team_strengths updated</div>
+    <div class="loop-arrow">›</div>
+    <div class="loop-step">player_stats (4h)</div>
+    <div class="loop-arrow">›</div>
+    <div class="loop-step">precompute-analyses</div>
+    <div class="loop-arrow">›</div>
+    <div class="loop-step">Sharper next prediction</div>
+  </div>
+</div>
+
+<div class="footer">oracleoddsai.com · Powered by Poisson + Gemini AI · Built for edge</div>
+
+</body>
+</html>

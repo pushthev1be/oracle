@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 720" width="1100" height="720" style="font-family: 'Segoe UI', system-ui, sans-serif;">
+  <!-- Background -->
+  <rect width="1100" height="720" fill="#0a0f0a"/>
+
+  <!-- Header -->
+  <text x="550" y="38" text-anchor="middle" font-size="10" fill="#4ade80" letter-spacing="6" font-weight="500">ARCHITECTURE</text>
+  <text x="550" y="64" text-anchor="middle" font-size="26" fill="#f0faf0" font-weight="700" letter-spacing="1">Oracle Odds AI</text>
+  <text x="550" y="82" text-anchor="middle" font-size="10" fill="#4a5e4a" letter-spacing="3">PREDICTION ENGINE · V1.6</text>
+
+  <!-- Column Headers -->
+  <text x="165" y="110" text-anchor="middle" font-size="9" fill="#4a5e4a" letter-spacing="3">DATA SOURCES</text>
+  <line x1="60" y1="116" x2="270" y2="116" stroke="#1a2a1a" stroke-width="1"/>
+  <text x="550" y="110" text-anchor="middle" font-size="9" fill="#4a5e4a" letter-spacing="3">PROCESSING</text>
+  <line x1="330" y1="116" x2="770" y2="116" stroke="#1a2a1a" stroke-width="1"/>
+  <text x="935" y="110" text-anchor="middle" font-size="9" fill="#4a5e4a" letter-spacing="3">AI LAYER</text>
+  <line x1="820" y1="116" x2="1050" y2="116" stroke="#1a2a1a" stroke-width="1"/>
+
+  <!-- ═══════════════ DATA SOURCE CARDS (col 1) ═══════════════ -->
+  <!-- Smarkets -->
+  <rect x="55" y="128" width="220" height="58" rx="7" fill="#0f1a0f" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="70" y="143" font-size="8" fill="#4a5e4a" letter-spacing="2">ODDS</text>
+  <text x="70" y="157" font-size="12" fill="#d4ecd4" font-weight="600">Smarkets</text>
+  <text x="70" y="170" font-size="10" fill="#4a6a4a">Scraped 1x2 odds · live feed</text>
+  <rect x="70" y="175" width="28" height="8" rx="3" fill="#14532d"/>
+  <text x="84" y="182" text-anchor="middle" font-size="7" fill="#4ade80" letter-spacing="1">LIVE</text>
+
+  <!-- Pinnacle -->
+  <rect x="55" y="194" width="220" height="58" rx="7" fill="#0f1a0f" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="70" y="209" font-size="8" fill="#4a5e4a" letter-spacing="2">ODDS</text>
+  <text x="70" y="223" font-size="12" fill="#d4ecd4" font-weight="600">Pinnacle</text>
+  <text x="70" y="236" font-size="10" fill="#4a6a4a">NBA / NCAAB sharp lines</text>
+  <rect x="70" y="241" width="28" height="8" rx="3" fill="#14532d"/>
+  <text x="84" y="248" text-anchor="middle" font-size="7" fill="#4ade80" letter-spacing="1">LIVE</text>
+
+  <!-- Aggregator -->
+  <rect x="55" y="260" width="220" height="58" rx="7" fill="#0f1a0f" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="70" y="275" font-size="8" fill="#4a5e4a" letter-spacing="2">ODDS</text>
+  <text x="70" y="289" font-size="12" fill="#d4ecd4" font-weight="600">Aggregator</text>
+  <text x="70" y="302" font-size="10" fill="#4a6a4a">114 unified markets</text>
+  <rect x="70" y="307" width="28" height="8" rx="3" fill="#14532d"/>
+  <text x="84" y="314" text-anchor="middle" font-size="7" fill="#4ade80" letter-spacing="1">LIVE</text>
+
+  <!-- ESPN -->
+  <rect x="55" y="326" width="220" height="58" rx="7" fill="#0f1a0f" stroke="#166534" stroke-width="1"/>
+  <text x="70" y="341" font-size="8" fill="#4a5e4a" letter-spacing="2">FIXTURES</text>
+  <text x="70" y="355" font-size="12" fill="#d4ecd4" font-weight="600">ESPN</text>
+  <text x="70" y="368" font-size="10" fill="#4a6a4a">Soccer · NBA · MLB · NFL · Tennis</text>
+  <rect x="70" y="373" width="44" height="8" rx="3" fill="#14532d"/>
+  <text x="92" y="380" text-anchor="middle" font-size="7" fill="#4ade80" letter-spacing="1">PRIMARY</text>
+
+  <!-- PrizePicks -->
+  <rect x="55" y="392" width="220" height="58" rx="7" fill="#0f1a0f" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="70" y="407" font-size="8" fill="#4a5e4a" letter-spacing="2">PROPS</text>
+  <text x="70" y="421" font-size="12" fill="#d4ecd4" font-weight="600">PrizePicks</text>
+  <text x="70" y="434" font-size="10" fill="#4a6a4a">2,900+ lines · 43 teams</text>
+  <rect x="70" y="439" width="28" height="8" rx="3" fill="#14532d"/>
+  <text x="84" y="446" text-anchor="middle" font-size="7" fill="#4ade80" letter-spacing="1">LIVE</text>
+
+  <!-- Underdog -->
+  <rect x="55" y="458" width="220" height="58" rx="7" fill="#0f1a0f" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="70" y="473" font-size="8" fill="#4a5e4a" letter-spacing="2">PROPS</text>
+  <text x="70" y="487" font-size="12" fill="#d4ecd4" font-weight="600">Underdog</text>
+  <text x="70" y="500" font-size="10" fill="#4a6a4a">Alternative prop lines</text>
+  <rect x="70" y="505" width="38" height="8" rx="3" fill="#1e2a1e"/>
+  <text x="89" y="512" text-anchor="middle" font-size="7" fill="#6b9e6b" letter-spacing="1">ACTIVE</text>
+
+  <!-- Arrows col 1→2 -->
+  <text x="296" y="162" font-size="16" fill="#2d4a2d">›</text>
+  <text x="296" y="228" font-size="16" fill="#2d4a2d">›</text>
+  <text x="296" y="294" font-size="16" fill="#2d4a2d">›</text>
+  <text x="296" y="360" font-size="16" fill="#4ade80">›</text>
+  <text x="296" y="426" font-size="16" fill="#2d4a2d">›</text>
+  <text x="296" y="487" font-size="16" fill="#2d4a2d">›</text>
+
+  <!-- ═══════════════ PROCESSING CARDS (col 2) ═══════════════ -->
+  <!-- Poisson Engine -->
+  <rect x="328" y="128" width="220" height="72" rx="7" fill="#0f1a0f" stroke="#166534" stroke-width="1"/>
+  <rect x="328" y="128" width="220" height="72" rx="7" fill="none" stroke="#166534" stroke-width="1" opacity="0.5"/>
+  <text x="343" y="143" font-size="8" fill="#4a5e4a" letter-spacing="2">CORE MODEL</text>
+  <text x="343" y="158" font-size="12" fill="#d4ecd4" font-weight="600">Poisson Engine</text>
+  <text x="343" y="171" font-size="9" fill="#4a6a4a">deriveLambdas() → P(score) matrix</text>
+  <text x="343" y="182" font-size="9" fill="#4a6a4a">→ win / draw / loss probs</text>
+  <rect x="343" y="188" width="64" height="8" rx="3" fill="#14532d"/>
+  <text x="375" y="195" text-anchor="middle" font-size="7" fill="#4ade80" letter-spacing="1">ALWAYS RUNS</text>
+
+  <!-- League Priors -->
+  <rect x="328" y="210" width="220" height="66" rx="7" fill="#0f1a0f" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="343" y="225" font-size="8" fill="#4a5e4a" letter-spacing="2">CALIBRATION</text>
+  <text x="343" y="239" font-size="12" fill="#d4ecd4" font-weight="600">League Priors</text>
+  <text x="343" y="252" font-size="9" fill="#4a6a4a">calibrationBias · home_bias · draw_bias</text>
+  <rect x="343" y="264" width="64" height="8" rx="3" fill="#1e2a1e"/>
+  <text x="375" y="271" text-anchor="middle" font-size="7" fill="#6b9e6b" letter-spacing="1">AUTO-UPDATED</text>
+
+  <!-- Team Strengths -->
+  <rect x="328" y="285" width="220" height="66" rx="7" fill="#0f1a0f" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="343" y="300" font-size="8" fill="#4a5e4a" letter-spacing="2">ELO RATINGS</text>
+  <text x="343" y="314" font-size="12" fill="#d4ecd4" font-weight="600">Team Strengths</text>
+  <text x="343" y="327" font-size="9" fill="#4a6a4a">attack_λ · defense_λ · 30-game avg</text>
+  <rect x="343" y="339" width="72" height="8" rx="3" fill="#1e2a1e"/>
+  <text x="379" y="346" text-anchor="middle" font-size="7" fill="#6b9e6b" letter-spacing="1">TRIGGER UPDATED</text>
+
+  <!-- Knowledge Graph -->
+  <rect x="328" y="360" width="220" height="66" rx="7" fill="#0f1a0f" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="343" y="375" font-size="8" fill="#4a5e4a" letter-spacing="2">FORM</text>
+  <text x="343" y="389" font-size="12" fill="#d4ecd4" font-weight="600">Knowledge Graph</text>
+  <text x="343" y="402" font-size="9" fill="#4a6a4a">EMA signals · W/D/L · xG trend</text>
+  <rect x="343" y="414" width="72" height="8" rx="3" fill="#1e2a1e"/>
+  <text x="379" y="421" text-anchor="middle" font-size="7" fill="#6b9e6b" letter-spacing="1">5-GAME WINDOW</text>
+
+  <!-- Rolling Form -->
+  <rect x="328" y="435" width="220" height="66" rx="7" fill="#0f1a0f" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="343" y="450" font-size="8" fill="#4a5e4a" letter-spacing="2">PROPS</text>
+  <text x="343" y="464" font-size="12" fill="#d4ecd4" font-weight="600">Rolling Form</text>
+  <text x="343" y="477" font-size="9" fill="#4a6a4a">player_stats · last5/last10 · trend</text>
+  <rect x="343" y="489" width="52" height="8" rx="3" fill="#1e2a1e"/>
+  <text x="369" y="496" text-anchor="middle" font-size="7" fill="#6b9e6b" letter-spacing="1">4H REFRESH</text>
+
+  <!-- Arrows col 2→3 -->
+  <text x="566" y="170" font-size="16" fill="#4ade80">›</text>
+  <text x="566" y="248" font-size="16" fill="#2d4a2d">›</text>
+  <text x="566" y="323" font-size="16" fill="#2d4a2d">›</text>
+  <text x="566" y="393" font-size="16" fill="#2d4a2d">›</text>
+  <text x="566" y="468" font-size="16" fill="#2d4a2d">›</text>
+
+  <!-- ═══════════════ AI LAYER CARDS (col 3) ═══════════════ -->
+  <!-- Gemini 2.5 Flash -->
+  <rect x="600" y="128" width="220" height="66" rx="7" fill="#0f1a0f" stroke="#166534" stroke-width="1"/>
+  <text x="615" y="143" font-size="8" fill="#4a5e4a" letter-spacing="2">MODEL</text>
+  <text x="615" y="157" font-size="12" fill="#d4ecd4" font-weight="600">Gemini 2.5 Flash</text>
+  <text x="615" y="170" font-size="9" fill="#4a6a4a">Primary · grounding · temp 0.0</text>
+  <rect x="615" y="182" width="44" height="8" rx="3" fill="#14532d"/>
+  <text x="637" y="189" text-anchor="middle" font-size="7" fill="#4ade80" letter-spacing="1">PRIMARY</text>
+
+  <!-- Gemini Proxy -->
+  <rect x="600" y="204" width="220" height="66" rx="7" fill="#0f1a0f" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="615" y="219" font-size="8" fill="#4a5e4a" letter-spacing="2">ROUTING</text>
+  <text x="615" y="233" font-size="12" fill="#d4ecd4" font-weight="600">Gemini Proxy</text>
+  <text x="615" y="246" font-size="9" fill="#4a6a4a">Server keys · round-robin · 65s CD</text>
+  <rect x="615" y="258" width="44" height="8" rx="3" fill="#1e2a1e"/>
+  <text x="637" y="265" text-anchor="middle" font-size="7" fill="#6b9e6b" letter-spacing="1">EDGE FN</text>
+
+  <!-- Props Oracle -->
+  <rect x="600" y="280" width="220" height="66" rx="7" fill="#0f1a0f" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="615" y="295" font-size="8" fill="#4a5e4a" letter-spacing="2">PROPS AI</text>
+  <text x="615" y="309" font-size="12" fill="#d4ecd4" font-weight="600">Props Oracle</text>
+  <text x="615" y="322" font-size="9" fill="#4a6a4a">OVER/UNDER · conf 40-82 · 6-word</text>
+  <rect x="615" y="334" width="56" height="8" rx="3" fill="#14532d"/>
+  <text x="643" y="341" text-anchor="middle" font-size="7" fill="#4ade80" letter-spacing="1">PER MATCH</text>
+
+  <!-- Fallback chain -->
+  <rect x="600" y="356" width="220" height="50" rx="7" fill="#0c120c" stroke="#182018" stroke-width="1"/>
+  <text x="615" y="371" font-size="8" fill="#4a5e4a" letter-spacing="2">FALLBACKS</text>
+  <text x="615" y="385" font-size="10" fill="#6b9e6b">Flash Lite → 1.5 Flash → Quant</text>
+  <text x="615" y="397" font-size="9" fill="#4a6a4a">Always returns a prediction</text>
+
+  <!-- ═══════════════ OUTPUTS ═══════════════ -->
+  <rect x="55" y="540" width="240" height="65" rx="7" fill="#0f1a0f" stroke="#166534" stroke-width="1"/>
+  <text x="175" y="563" text-anchor="middle" font-size="16">⚡</text>
+  <text x="175" y="579" text-anchor="middle" font-size="12" fill="#4ade80" font-weight="600">Match Predictions</text>
+  <text x="175" y="594" text-anchor="middle" font-size="9" fill="#4a6a4a">Scoreline · W/D/L · Confidence · EV</text>
+
+  <rect x="310" y="540" width="240" height="65" rx="7" fill="#0f1a0f" stroke="#166534" stroke-width="1"/>
+  <text x="430" y="563" text-anchor="middle" font-size="16">📊</text>
+  <text x="430" y="579" text-anchor="middle" font-size="12" fill="#4ade80" font-weight="600">Player Props</text>
+  <text x="430" y="594" text-anchor="middle" font-size="9" fill="#4a6a4a">OVER/UNDER · confidence · odds</text>
+
+  <rect x="565" y="540" width="240" height="65" rx="7" fill="#0f1a0f" stroke="#166534" stroke-width="1"/>
+  <text x="685" y="563" text-anchor="middle" font-size="16">📋</text>
+  <text x="685" y="579" text-anchor="middle" font-size="12" fill="#4ade80" font-weight="600">BetSlip</text>
+  <text x="685" y="594" text-anchor="middle" font-size="9" fill="#4a6a4a">User picks · Kelly sizing · settlement</text>
+
+  <rect x="820" y="540" width="240" height="65" rx="7" fill="#0f1a0f" stroke="#166534" stroke-width="1"/>
+  <text x="940" y="563" text-anchor="middle" font-size="16">📡</text>
+  <text x="940" y="579" text-anchor="middle" font-size="12" fill="#4ade80" font-weight="600">Telegram</text>
+  <text x="940" y="594" text-anchor="middle" font-size="9" fill="#4a6a4a">Morning picks · evening results</text>
+
+  <!-- ═══════════════ LEARNING LOOP ═══════════════ -->
+  <rect x="55" y="622" width="1005" height="56" rx="8" fill="#0c120c" stroke="#1a2e1a" stroke-width="1"/>
+  <text x="80" y="648" font-size="9" fill="#4ade80" letter-spacing="3">LEARNING LOOP</text>
+  <line x1="148" y1="632" x2="148" y2="668" stroke="#1a2e1a" stroke-width="1"/>
+
+  <!-- Loop steps -->
+  <rect x="158" y="636" width="82" height="22" rx="4" fill="#111a11" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="199" y="651" text-anchor="middle" font-size="9" fill="#6b9e6b">Match Played</text>
+  <text x="247" y="651" font-size="13" fill="#2d4a2d">›</text>
+
+  <rect x="256" y="636" width="92" height="22" rx="4" fill="#111a11" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="302" y="651" text-anchor="middle" font-size="9" fill="#6b9e6b">ESPN Boxscore</text>
+  <text x="355" y="651" font-size="13" fill="#2d4a2d">›</text>
+
+  <rect x="364" y="636" width="118" height="22" rx="4" fill="#111a11" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="423" y="651" text-anchor="middle" font-size="9" fill="#6b9e6b">settle-predictions</text>
+  <text x="489" y="651" font-size="13" fill="#2d4a2d">›</text>
+
+  <rect x="498" y="636" width="110" height="22" rx="4" fill="#111a11" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="553" y="651" text-anchor="middle" font-size="9" fill="#6b9e6b">league_priors ↑</text>
+  <text x="615" y="651" font-size="13" fill="#2d4a2d">›</text>
+
+  <rect x="624" y="636" width="116" height="22" rx="4" fill="#111a11" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="682" y="651" text-anchor="middle" font-size="9" fill="#6b9e6b">team_strengths ↑</text>
+  <text x="747" y="651" font-size="13" fill="#2d4a2d">›</text>
+
+  <rect x="756" y="636" width="100" height="22" rx="4" fill="#111a11" stroke="#1e2e1e" stroke-width="1"/>
+  <text x="806" y="651" text-anchor="middle" font-size="9" fill="#6b9e6b">player_stats 4h</text>
+  <text x="863" y="651" font-size="13" fill="#2d4a2d">›</text>
+
+  <rect x="872" y="636" width="100" height="22" rx="4" fill="#14532d" stroke="#166534" stroke-width="1"/>
+  <text x="922" y="651" text-anchor="middle" font-size="9" fill="#4ade80">Sharper Model</text>
+
+  <!-- Footer -->
+  <text x="550" y="710" text-anchor="middle" font-size="9" fill="#2d3a2d" letter-spacing="2">ORACLEODDSAI.COM · POISSON + GEMINI AI · BUILT FOR EDGE</text>
+</svg>

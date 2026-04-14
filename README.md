@@ -10,6 +10,10 @@
 
 <div align="center">
 
+<img src="assets/engine-diagram.svg" width="100%" alt="Oracle Engine Architecture" />
+
+<br/><br/>
+
 <img src="assets/pulisic.png" width="130" alt="Pulisic" />
 &nbsp;&nbsp;
 <img src="assets/alexander_arnold.png" width="130" alt="Alexander-Arnold" />
