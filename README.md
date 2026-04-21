@@ -4,6 +4,8 @@
 
 🌐 **[oracleai.live](https://oracleai.live)** &nbsp;|&nbsp; 📱 **[Telegram](https://t.me/oracleoddsai)** &nbsp;|&nbsp; 🐦 **[@oracleoddsai](https://twitter.com/oracleoddsai)**
 
+
+   <img width="1068" height="894" alt="Image" src="https://github.com/user-attachments/assets/f5a313f9-b418-425e-a8bc-6ca8d16768f9" />
 ---
 
 ## Traction
